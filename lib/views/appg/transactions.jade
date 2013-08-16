@@ -1,0 +1,53 @@
+extends layout
+
+block content
+  h1 Pending transactions
+    -if (pending.length == 0) {
+      h4 You have no pending transactions.
+    -} else {
+  ul(class="transactionList")
+    -for (var t in pending) {
+      -var trans = pending[t]
+      -var timestamp = new Date(trans.timestamp)
+      li(class="transactionListItem")
+        div(class="timestamp")
+          |#{timestamp.toDateString()} #{timestamp.getHours()}:#{("00" + timestamp.getMinutes()).substr(-2)}:#{("00" + timestamp.getSeconds()).substr(-2)}
+        div
+          |#{trans.description} from #{trans.destination}
+        div
+          |#{trans.value} #{trans.currency} payment by #{trans.source} via #{trans.origin}
+        div(class="transactionChoices")
+          a(class="confirmButton",href="/appg/response/confirmed/#{trans.id}") confirm
+          a(class="declineButton",href="/appg/response/declined/#{trans.id}") decline
+    -}
+    -}
+  hr
+  h1 Recent transactions
+    -if (recent.length == 0) {
+      h4 There have been no recent transactions.
+    -} else {
+  ul(class="transactionList")
+    -for (var t in recent) {
+      -var trans = recent[t]
+      -var timestamp = new Date(trans.timestamp)
+      li(class="transactionListItem")
+        div(class="timestamp")
+          |#{timestamp.toDateString()} #{timestamp.getHours()}:#{("00" + timestamp.getMinutes()).substr(-2)}:#{("00" + timestamp.getSeconds()).substr(-2)}
+        -if (trans.blocking) {
+          -if (trans.decision === "confirmed") {
+            div(class="confirmed")
+              |confirmed
+          -} else {
+            div(class="declined")
+              |declined
+          -}
+        -} else {
+            div(class="notification")
+              |notification
+        -}
+        div
+          |#{trans.description} from #{trans.destination}
+        div
+          |#{trans.value} #{trans.currency} payment by #{trans.source} via #{trans.origin}
+    -}
+    -}

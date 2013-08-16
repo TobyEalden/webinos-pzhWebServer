@@ -1,0 +1,144 @@
+extends layout
+
+block content
+  script(type="text/javascript")
+    function activateTab(t) {
+      $(".settingsListItem").removeClass("settingsListItemActive");
+      $(t.parentElement).addClass("settingsListItemActive");
+      var contentTab = "#" + t.id + "Content";
+      $(".settingsContent").hide();
+      $(contentTab).show();
+    }
+    function savePromptSettings(el) {
+      var url = "/appg/savePromptSettings/" + el.id.split('|')[1] + "/" + (el.checked ? "true" : "false") + "?_csrf=#{csrf}";
+      $.post(url).done(function(data) {
+        if (!data.ok) {
+          alert("save failed!!");
+        }
+      }).fail(function(xhr,status,err) {
+        alert("ajax error!");
+      });
+    }
+    function saveEmailSettings() {
+      var email = $("#emailAddress").val();
+      var url = "/appg/saveEmailSettings/" + email + "?_csrf=#{csrf}";
+      $.post(url).done(function(data) {
+        if (!data.ok) {
+          alert("save failed!!");
+        }
+      }).fail(function(xhr,status,err) {
+        alert("ajax error!");
+      });
+    }
+    function saveSMSSettings() {
+      var number = $("#smsNumber").val();
+      var url = "/appg/saveSMSSettings/" + number + "?_csrf=#{csrf}";
+      $.post(url).done(function(data) {
+        if (!data.ok) {
+          alert("save failed!!");
+        }
+      }).fail(function(xhr,status,err) {
+        alert("ajax error!");
+      });
+    }
+    function saveVoiceSettings() {
+      var number = $("#voiceNumber").val();
+      var url = "/appg/saveVoiceSettings/" + number + "?_csrf=#{csrf}";
+      $.post(url).done(function(data) {
+        if (!data.ok) {
+          alert("save failed!!");
+        }
+      }).fail(function(xhr,status,err) {
+        alert("ajax error!");
+      });
+    }
+    function saveTraySettings(el) {
+      var url = "/appg/saveTraySettings/" + el.id.split('|')[1] + "/" + (el.checked ? "true" : "false") + "?_csrf=#{csrf}";
+      $.post(url).done(function(data) {
+        if (!data.ok) {
+          alert("save failed!!");
+        }
+      }).fail(function(xhr,status,err) {
+        alert("ajax error!");
+      });
+    }
+    $(function() {
+      $(".settingsTab").click(function() {
+        activateTab(this);
+      });
+      $(".promptCheck").click(function() {
+        savePromptSettings(this);
+      });
+      $(".trayCheck").click(function() {
+        saveTraySettings(this);
+      });
+      $("#emailAddress").change(function() {
+        saveEmailSettings();
+      });
+      $("#smsNumber").change(function() {
+        saveSMSSettings();
+      });
+      $("#voiceNumber").change(function() {
+        saveVoiceSettings();
+      });
+      activateTab($("#promptTab")[0]);
+    });
+  h1 Settings
+
+  ul(class="settingsList")
+    li(class="settingsListItem")
+      a#promptTab(href="#", class="settingsTab") prompts
+    li(class="settingsListItem")
+      a#emailTab(href="#", class="settingsTab") email
+    li(class="settingsListItem")
+      a#smsTab(href="#", class="settingsTab") sms
+    li(class="settingsListItem")
+      a#voiceTab(href="#", class="settingsTab") voice
+    li(class="settingsListItem")
+      a#trayTab(href="#", class="settingsTab") system tray
+  div#promptTabContent(class="settingsContent")
+    -if (pzps.length == 0) {
+      h4 You currently have no devices enrolled
+    -} else {
+      h4 Show prompts on the following devices
+      -for (var p = 0; p < pzps.length; p++) {
+        -var pzp = pzps[p];
+        -var pzpId = pzp.url.substr(pzp.url.lastIndexOf('/')+1);
+        -if (notificationConfig.appgPromptNotification.hasOwnProperty(pzpId) && notificationConfig.appgPromptNotification[pzpId] === true) {
+          input(class="promptCheck",type="checkbox",id="prompt|#{pzpId}",checked="checked")
+        -} else {
+          input(class="promptCheck",type="checkbox",id="prompt|#{pzpId}")
+        -}
+        label(for="prompt|#{pzpId}") #{pzp.id}
+        br
+      -}
+    -}
+  div#emailTabContent(class="settingsContent")
+    form
+      h4 Notification e-mail address
+      input#emailAddress(class="settingsTextInput",type="text",value="#{notificationConfig.appgEmailNotification.email}")
+  div#smsTabContent(class="settingsContent")
+    form
+      h4 SMS notification number
+      input#smsNumber(class="settingsTextInput",type="text",value="#{notificationConfig.appgSMSNotification.number}")
+  div#voiceTabContent(class="settingsContent")
+    form
+      h4 Voice notification number
+      input#voiceNumber(class="settingsTextInput",type="text",value="#{notificationConfig.appgVoiceNotification.number}")
+  div#trayTabContent(class="settingsContent")
+    -if (pzps.length == 0) {
+      h4 You currently have no devices enrolled
+    -} else {
+      h4 Show system tray notifications on the following devices
+      -for (var p = 0; p < pzps.length; p++) {
+        -var pzp = pzps[p];
+        -var pzpId = pzp.url.substr(pzp.url.lastIndexOf('/')+1);
+        -if (notificationConfig.trayNotification.hasOwnProperty(pzpId) && notificationConfig.trayNotification[pzpId] === true) {
+          input(class="trayCheck",type="checkbox",id="tray|#{pzpId}",checked="checked")
+        -} else {
+          input(class="trayCheck",type="checkbox",id="tray|#{pzpId}")
+        -}
+        label(for="tray|#{pzpId}") #{pzp.id}
+        br
+      -}
+    -}

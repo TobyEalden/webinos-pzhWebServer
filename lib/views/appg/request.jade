@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  h1 Request a payment
+  form
+    table
+      tr
+        th target
+        td
+          select
+            option toby.ealden@gmail.com
+            option nick@nquiringminds.com
+      tr
+        th origin
+        td
+          select
+            option PayPal
+            option WorldPayment
+      tr
+        th source
+        td
+          select
+            option Mastercard
+            option Visa Credit
+            option Visa Debit
+      tr
+        th destination
+        td
+          select
+            option Amazon
+            option Ebay
+            option BT
+            option E-on
+      tr
+        th value
+        td
+          input(type="text")
+      tr
+        th
+        td(style="text-align:right;")
+          input(type="submit", value="Submit")

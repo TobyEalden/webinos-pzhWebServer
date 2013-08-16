@@ -1,0 +1,38 @@
+html
+  head
+    link(type="text/css",href="/appg/css/style.css",rel="stylesheet")
+    link(href='https://fonts.googleapis.com/css?family=Roboto', rel='stylesheet', type='text/css')
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js", type="text/javascript")
+  body
+    header
+      div.heading
+        div
+          div.copyright copyright &copy; 2013
+            br
+            a(href="http://ubiapps.com") ubiapps.com
+            br
+            span= profile.emails[0].value
+          div
+            a(href="/appg")
+              img(src="/appg/images/logo.png")
+            div.subtitle Personal Payment Gateway
+        div.menuContainer
+          div.menu
+            div.menuItemStart &nbsp;
+            div.menuItem
+              a(href="/appg") home
+            div.menuItem
+              a(href="/appg/transactions", title="view your outstanding and recent transactions") transactions
+            div.menuItem
+              a(href="/appg/settings", title="customise Aegis PPG") settings
+            //div.menuItem
+              a(href="/appg/notify") payment notification
+            //div.menuItem
+              a(href="/appg/request") request payment
+            div.menuItem
+              a(href="/") zone dashboard
+            div.menuItem
+              a(href="/appg/about") about
+            div.menuItemStop &nbsp;
+    section
+      block content

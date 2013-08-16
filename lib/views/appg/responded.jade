@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  -var timestamp = new Date(trans.timestamp)
+  h1 Transaction #{decision}
+  div(class="timestamp")
+    |#{timestamp.toDateString()} #{timestamp.getHours()}:#{("00" + timestamp.getMinutes()).substr(-2)}:#{("00" + timestamp.getSeconds()).substr(-2)}
+  div
+    |#{trans.description} from #{trans.destination}
+  div
+    |#{trans.value} #{trans.currency} payment by #{trans.source} via #{trans.origin}
+  br
+  a(href="/appg/transactions") continue...
