@@ -26,6 +26,8 @@ block content
     -if (recent.length == 0) {
       h4 There have been no recent transactions.
     -} else {
+  div.transactionCommands
+    a(href="/appg/clearTransactions") clear transactions
   ul(class="transactionList")
     -for (var t in recent) {
       -var trans = recent[t]
